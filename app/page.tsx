@@ -1,127 +1,76 @@
-'use client';
+'use client'
 
-import { use, useState, FormEvent } from "react";
+import Image from "next/image";
+import { useState, FormEvent } from "react";
 
 export default function Home() {
-
-  const [countClick, setCountClick] = useState(0);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [submittedName, setSubmittedName] = useState('');
   const [submittedEmail, setSubmittedEmail] = useState('');
-  const [action, setAction] = useState('');
+  const [showForm, setShowForm] = useState(false);
+  const [formType, setFormType] = useState(''); // 'signup' or 'login'
 
-  const countClickHandler = () => {
-    setCountClick(countClick + 1);
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    setSubmittedName(name);
+    setSubmittedEmail(email);
   };
 
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-  
-    if (action === "login") {
-      console.log("Logging in with: ", name, email);
-    } else if (action === "signup") {
-      console.log("Signing up with: ", name, email);
-      try {
-        const response = await fetch('/api/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ name, email }),
-        });
-  
-        const data = await response.json();
-  
-        if (data.success) {
-          console.log('Sign up successful!', data);
-          setSubmittedName(name);
-          setSubmittedEmail(email);
-        } else {
-          console.error('Sign up failed:', data.error);
-        }
-      } catch (error) {
-        console.error('Error during sign up:', error);
-      }
-    }
-  }
-
-  // const handleLogin = (event: FormEvent) => {
-  //   event.preventDefault();
-  //   console.log('Logged In Successfully!');
-  // }
-
-  // const handleSignup = (event: FormEvent) => {
-  //   event.preventDefault();
-  //   console.log('Signing Up New Account!');
-  // }
+  const handleButtonClick = (type: string) => {
+    setShowForm(true);
+    setFormType(type);
+  };
 
   return (
     <main className="flex min-h-screen items-center justify-center">
-      <div className="border-r-2 border-zinc-500 flex flex-col w-1/2 h-screen justify-center items-center bg-cover bg-center" style={{backgroundImage: `url(/Form-Cover-Image.jpg)`}}>  
-        <div className="border-4 border-black rounded-2xl p-8 bg-white">
-          <h1 className="text-8xl font-extrabold">Printify.</h1>
-          <h2 className="text-3xl text-slate-800 font-light pl-1">Premium Art Prints</h2>
+      <div className="bg-cover flex flex-col justify-center items-center w-1/2 min-h-screen">
+        <div className="rounded-3xl p-2 bg-gradient-to-br from-neutral-900 to-black/90">
+          <div className="bg-transparent p-6 rounded-[calc(1.5rem-1px)]">
+            <h1 className="leading-snug text-8xl font-extrabold bg-gradient-to-r from-rose-200 via-pink-400 to-sky-300 text-transparent bg-clip-text">Printify.</h1>
+            <h2 className="text-3xl font-light text-transparent bg-gradient-to-br from-neutral-50 to-neutral-500 bg-clip-text">Best <span className="bg-gradient-to-l from-rose-200 via-pink-400 to-sky-300 bg-clip-text">Prints</span> Around</h2>
+          </div>
         </div>
       </div>
-      <div className="flex flex-col w-1/2 h-screen items-center justify-center bg-gradient-to-r from-neutral-300 to-neutral-400">
-        <form className="flex flex-col items-center justify-center" onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-2" htmlFor="name">
-              Name
-            </label>  
-            <input
-              className="appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500"
-              id="name"
-              type="text"
-              name="name"
-              placeholder="Ali Jawad"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-2" htmlFor="email">
-              Email
-            </label>
-            <input
-              className="appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500"
-              id="email"
-              type="email"
-              name="email"
-              placeholder="test@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <button
-              className="mr-1 bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-              onClick={() => setAction("login")}
-            >
-              Log In
-            </button>
-            <button
-              className="ml-1 bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-              onClick={() => setAction("signup")}
-            >
-              Sign Up
-            </button>
-          </div>
-        </form>
-        <div className="flex flex-col items-center justify-center">
-          <h2 className="text-4xl font-bold mt-8">Input Recieved:</h2>
-          <label htmlFor="name-output" className="text-2xl mt-4">Name: <span className="text-2xl font-bold">{submittedName}</span></label>
-          <label htmlFor="email-output" className="text-2xl">Email: <span className="text-2xl font-bold">{submittedEmail}</span></label>
+      <div className="bg-cover flex flex-col justify-center items-center w-1/2 min-h-screen relative">
+        <div className="absolute inset-0 bg-cover bg-center transition-opacity duration-300 ease-in-out hover:opacity-0 bg-[url('https://cdn.leonardo.ai/users/13ae5bda-727f-40cc-8ecc-9ea3f021a830/generations/8be1e685-6e90-493a-bbcf-7350afd2c781/Default_A_minimalist_overhead_shot_of_two_meticulously_chosen_0.jpg')]">
         </div>
-        <div className="flex flex-col justify-center items-center">
-          <h2 className="text-4xl font-bold mt-4">Button Prop Test:</h2>
-          <h3 className="text-2xl mt-4">State Value: {countClick}</h3>
-          <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" onClick={countClickHandler}>Click Me</button>
+        <div className="absolute inset-0 flex flex-col justify-center items-center transition-opacity duration-300 ease-in-out opacity-0 hover:opacity-100 bg-gradient-to-br from-sky-200 via-rose-300 to-slate-600">
+          {!showForm ? (
+            <>
+              <h1 className="text-7xl font-bold leading-snug mb-2 bg-gradient-to-r from-black via-neutral-700 to-gray-900 text-transparent bg-clip-text">Welcome!</h1>
+              <div className="flex space-x-4">
+                <button 
+                  className="text-xl rounded-lg py-2 px-5 bg-gradient-to-r from-neutral-900 to-neutral-800 transition-opacity duration-300 ease-in-out opacity-70 hover:opacity-100"
+                  onClick={() => handleButtonClick('signup')}
+                >
+                  Sign Up
+                </button>
+                <button 
+                  className="text-xl rounded-lg py-2 px-5 bg-gradient-to-r from-neutral-900 to-neutral-800 transition-opacity duration-300 ease-in-out opacity-70 hover:opacity-100"
+                  onClick={() => handleButtonClick('login')}
+                >
+                  Log In
+                </button>
+              </div>
+            </>
+          ) : (
+            <form className="flex flex-col justify-center items-center" onSubmit={handleSubmit}>
+              <h1 className="text-7xl font-bold leading-snug mb-2 bg-gradient-to-r from-black via-neutral-700 to-gray-900 text-transparent bg-clip-text">
+                {formType === 'signup' ? 'Sign Up' : 'Log In'}
+              </h1>
+              <label htmlFor="name" className="self-start mt-2 font-normal text-lg bg-gradient-to-r from-black via-neutral-700 to-gray-900 text-transparent bg-clip-text">
+                {formType === 'signup' ? 'Enter name:' : 'Enter email:'}
+              </label>
+              <input 
+                type="text" 
+                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                value={formType === 'signup' ? name : email}
+                onChange={(e) => formType === 'signup' ? setName(e.target.value) : setEmail(e.target.value)}
+              />
+              <button type="submit" className="mt-4 py-2 px-4 bg-blue-500 text-white rounded-lg">Submit</button>
+            </form>
+          )}
         </div>
       </div>
     </main>
