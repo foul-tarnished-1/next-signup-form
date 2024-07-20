@@ -22,6 +22,12 @@ export default function Home() {
     setFormType(type);
   };
 
+  const handleBackClick = () => {
+    setShowForm(false);
+    setName('');
+    setEmail('');
+  };
+
   return (
     <main className="flex min-h-screen items-center justify-center">
       <div className="bg-cover flex flex-col justify-center items-center w-1/2 min-h-screen">
@@ -62,13 +68,16 @@ export default function Home() {
               <label htmlFor="name" className="self-start mt-2 font-normal text-lg bg-gradient-to-r from-black via-neutral-700 to-gray-900 text-transparent bg-clip-text">
                 {formType === 'signup' ? 'Enter name:' : 'Enter email:'}
               </label>
-              <input 
+              <input
                 type="text" 
                 className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 value={formType === 'signup' ? name : email}
                 onChange={(e) => formType === 'signup' ? setName(e.target.value) : setEmail(e.target.value)}
               />
-              <button type="submit" className="mt-4 py-2 px-4 bg-blue-500 text-white rounded-lg">Submit</button>
+              <div className="flex space-x-4">
+                <button type="submit" className="mt-4 text-xl rounded-lg py-2 px-5 bg-gradient-to-r from-neutral-900 to-neutral-800 transition-opacity duration-300 ease-in-out opacity-70 hover:opacity-100">Submit</button>
+                <button className="mt-4 text-xl rounded-lg py-2 px-5 bg-gradient-to-r from-neutral-900 to-neutral-800 transition-opacity duration-300 ease-in-out opacity-70 hover:opacity-100" onClick={handleBackClick}>Go Back</button>  
+              </div>
             </form>
           )}
         </div>
