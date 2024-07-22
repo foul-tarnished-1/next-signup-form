@@ -1,14 +1,17 @@
 import mongoose from 'mongoose';
 
-const FormSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, 'Please provide a username'],
   },
   email: {
     type: String,
-    required: true,
+    required: [true, 'Please provide an email'],
   },
-});
+})
 
-export default mongoose.models.Form || mongoose.model('Form', FormSchema);
+const User = mongoose.models.users || mongoose.model
+("User", UserSchema);
+
+export default User;

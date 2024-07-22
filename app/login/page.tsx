@@ -1,31 +1,34 @@
 'use client'
 
+import { error } from "console";
 import Link from "next/link";
+import { resolve } from "path";
 import { useState } from "react";
 import { FormEvent } from "react";
-import { Path, useForm, UseFormRegister, SubmitHandler } from "react-hook-form";
+import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
+
+type FormFields = {
+  name: string;
+  password: string;
+}
 
 export default function Page() {
+    const { register,
+            handleSubmit, 
+            setError,
+            formState: { errors, isSubmitting },
+          } = useForm<FormFields>();
 
-  interface FormValues {
-    name: string
-    email: string
-  }
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-  });
-
-  async function onSubmit(event:FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    const formData = new FormData(event.currentTarget)
-    const response = await fetch('api/submit', {
-      method: 'POST',
-      body: formData,
-    })
-  }
+    const onSubmit: SubmitHandler<FormFields> = async (data) => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        console.log(data);
+      } catch (error) {
+        setError("name", {
+          message: "The username is incorrect!",
+        })
+      }
+    };
 
     return (
         <main className="flex min-h-screen items-center justify-center">
@@ -43,25 +46,38 @@ export default function Page() {
           <div className="absolute inset-0 flex flex-col justify-center items-center transition-opacity duration-300 ease-in-out opacity-0 hover:opacity-100 bg-gradient-to-br from-sky-200 via-rose-300 to-slate-600">
             <h1 className="text-7xl font-bold leading-snug mb-2 bg-gradient-to-r from-black via-neutral-700 to-gray-900 text-transparent bg-clip-text">Log In!</h1>
             <div className="flex space-x-4">
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col space-y-2 justify-center">
                         <label htmlFor="name" className="text-xl text-black">Enter username:</label>
                         <input 
+                          {...register("name", {
+                            required: "Email is required.", 
+                          })}
                           type="text" 
                           name="name"
                           placeholder="Ali Jawad"
                           className="p-2 text-xl rounded-lg bg-gradient-to-r from-neutral-900 to-neutral-800 opacity-50"/>
+                          {errors.name && (
+                            <div className="text-red-500">{errors.name.message}</div>
+                          )}
                         <label htmlFor="email" className="text-xl text-black">Enter password:</label>
                         <input 
+                          {...register("password", {
+                            required: "Password is required.",
+                          })}
                           type="password" 
                           name="password"
                           className="p-2 text-xl rounded-lg bg-gradient-to-r from-neutral-900 to-neutral-800 opacity-50"/>
+                          {errors.password && (
+                            <div className="text-red-500">{errors.password.message}</div>
+                          )}
                     </div>
                     <div className="flex mt-6 justify-center space-x-6">
                       <button 
+                        disabled={isSubmitting}
                         type="submit"
                         className="text-xl rounded-lg py-2 px-5 bg-gradient-to-r from-neutral-900 to-neutral-800 transition-opacity duration-300 ease-in-out opacity-70 hover:opacity-100">
-                      Log In
+                      {isSubmitting ? "Loading" : "Submit"}
                       </button>
                       <Link href={'/'}>
                           <button 
