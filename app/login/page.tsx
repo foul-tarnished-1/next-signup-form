@@ -41,9 +41,9 @@ export default function Page() {
           </div>
         </div>
         <div className="bg-cover flex flex-col justify-center items-center w-1/2 min-h-screen relative">
-          <div className="absolute inset-0 bg-cover bg-center transition-opacity duration-300 ease-in-out hover:opacity-0 bg-[url('https://cdn.leonardo.ai/users/13ae5bda-727f-40cc-8ecc-9ea3f021a830/generations/8be1e685-6e90-493a-bbcf-7350afd2c781/Default_A_minimalist_overhead_shot_of_two_meticulously_chosen_0.jpg')]">
+        <div className="absolute inset-0 bg-cover bg-center opacity-0 bg-[url('https://cdn.leonardo.ai/users/13ae5bda-727f-40cc-8ecc-9ea3f021a830/generations/8be1e685-6e90-493a-bbcf-7350afd2c781/Default_A_minimalist_overhead_shot_of_two_meticulously_chosen_0.jpg')]">
           </div>
-          <div className="absolute inset-0 flex flex-col justify-center items-center transition-opacity duration-300 ease-in-out opacity-0 hover:opacity-100 bg-gradient-to-br from-sky-200 via-rose-300 to-slate-600">
+          <div className="absolute inset-0 flex flex-col justify-center items-center opacity-100 bg-gradient-to-br from-sky-200 via-rose-300 to-slate-600">
             <h1 className="text-7xl font-bold leading-snug mb-2 bg-gradient-to-r from-black via-neutral-700 to-gray-900 text-transparent bg-clip-text">Log In!</h1>
             <div className="flex space-x-4">
                 <form onSubmit={handleSubmit(onSubmit)}>
